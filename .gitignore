@@ -1,0 +1,18 @@
+# Secrets — never commit real keys
+.env
+
+# Cached market data (re-downloadable from the API)
+backtest/data_cache/
+
+# Forward-test runtime state and generated dashboard data
+paper_state.db
+dashboard_data.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Archives shipped with the handoff
+*.zip

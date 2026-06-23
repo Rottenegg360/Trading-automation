@@ -1,0 +1,45 @@
+name: daily-briefing
+
+# Generates the combined 9am-Bangkok briefing (yesterday's performance recap +
+# today's market context) and commits it to briefings/latest.md. The Cowork
+# routine just displays that file, so Cowork needs NO Alpaca keys.
+on:
+  schedule:
+    # 02:00 UTC = 09:00 Asia/Bangkok. Cron may run a little late; fine for 9am.
+    - cron: "0 2 * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: daily-briefing
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  briefing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Generate briefing
+        env:
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+        run: |
+          mkdir -p briefings
+          DATE=$(TZ=Asia/Bangkok date +%Y-%m-%d)
+          # Read the live paper account (normalised to $1,000) when trading for real.
+          BROKER=""
+          if [ "${{ vars.SUBMIT_BROKER }}" = "true" ]; then BROKER="--broker"; fi
+          python -m backtest.live.report --daily $BROKER | tee "briefings/$DATE.md" > briefings/latest.md
+      - name: Commit briefing
+        run: |
+          git config user.name "paper-bot"
+          git config user.email "paper-bot@users.noreply.github.com"
+          git add briefings/
+          git commit -m "daily briefing [skip ci]" || echo "no briefing change"
+          git push || echo "nothing to push"

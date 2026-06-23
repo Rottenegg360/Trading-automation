@@ -1,0 +1,59 @@
+name: paper-trade
+
+# Independent trading runtime: runs one forward-test cycle every ~15 min during
+# US market hours and commits the updated $1,000 ledger back to the repo so the
+# state persists between runs. Ledger-only (no broker orders) by default.
+on:
+  schedule:
+    # Every 15 min, 13:00-21:00 UTC, Mon-Fri (covers US RTH + close). GitHub
+    # cron is UTC and may be delayed under load — fine for a paper test.
+    - cron: "*/15 13-21 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "prime (set start line, no trades) or trade (one cycle)"
+        default: "trade"
+      submit_broker:
+        description: "Also place orders on Alpaca PAPER (true/false)"
+        default: "false"
+
+# Serialize runs so the committed ledger never races with itself.
+concurrency:
+  group: paper-trade
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  trade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Run forward-test cycle (or prime)
+        env:
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+        run: |
+          if [ "${{ github.event.inputs.mode }}" = "prime" ]; then
+            python -m backtest.live.run --prime
+          else
+            EXTRA=""
+            # Real paper bracket orders when the repo variable SUBMIT_BROKER=true
+            # (or the manual dispatch input is true). Otherwise ledger-sim.
+            if [ "${{ github.event.inputs.submit_broker }}" = "true" ] || [ "${{ vars.SUBMIT_BROKER }}" = "true" ]; then
+              EXTRA="--submit-broker"
+            fi
+            python -m backtest.live.run --once $EXTRA
+          fi
+      - name: Persist ledger
+        run: |
+          git config user.name "paper-bot"
+          git config user.email "paper-bot@users.noreply.github.com"
+          git add -f paper_state.db
+          git commit -m "ledger update [skip ci]" || echo "no ledger change"
+          git push || echo "nothing to push"

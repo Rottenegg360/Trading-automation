@@ -7,7 +7,7 @@
 set -uo pipefail
 
 # ---- settings (edit if you want) ----
-SHAPE="VM.Standard.A1.Flex"     # fallback: "VM.Standard.E2.1.Micro" (then OCPUS/MEM ignored)
+SHAPE="${SHAPE:-VM.Standard.A1.Flex}"   # override: SHAPE=VM.Standard.E2.1.Micro bash <script>
 OCPUS=1                          # A1.Flex only
 MEM=6                            # A1.Flex only (GB)
 DISPLAY_NAME="trading-bot"
@@ -64,7 +64,8 @@ while true; do
       echo "  SSH from here:  ssh -i $KEY ubuntu@${IP}"
       exit 0
     fi
-    reason=$(echo "$OUT" | grep -io 'out of host capacity\|limitexceeded\|too many requests\|[A-Za-z]*error' | head -1)
+    reason=$(echo "$OUT" | grep -io 'out of host capacity' | head -1)
+    [ -z "$reason" ] && reason=$(echo "$OUT" | grep -io 'limitexceeded\|too many requests\|notauthorized[a-z]*\|[a-z]*error' | head -1)
     echo "[$ts] $AD: ${reason:-retry}"
     sleep "$RETRY_SECONDS"
   done

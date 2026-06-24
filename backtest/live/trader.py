@@ -144,6 +144,9 @@ def run_cycle(ledger: Ledger, broker: PaperBroker, *, corr_threshold: float = 0.
 
     # 2) Entries.
     equity = broker.account_equity() if broker_mode else ledger.equity(last_prices)
+    # Self-heal the $-normalisation baseline if prime never persisted it.
+    if broker_mode and ledger.get_meta("account_baseline") is None:
+        ledger.set_meta("account_baseline", str(equity))
     held = set(broker.get_positions().keys()) if broker_mode else set(ledger.open_positions().keys())
     for sym, m in meta.items():
         if not new_bar(sym) or sym in held or sym in ledger.open_positions():

@@ -8,7 +8,10 @@ Type=simple
 User=ubuntu
 WorkingDirectory=/home/ubuntu/Trading-automation
 # Reads ALPACA keys from the project .env via python-dotenv.
-ExecStart=/home/ubuntu/Trading-automation/.venv/bin/python -m backtest.live.run --loop --bar-aligned --submit-broker
+# Polls every 60s (catches each bar close within a minute; rate-limit-safe).
+# Prefer precise timing? swap "--interval 60" for "--bar-aligned" (fires ~3s
+# after each close instead of polling).
+ExecStart=/home/ubuntu/Trading-automation/.venv/bin/python -m backtest.live.run --loop --interval 60 --submit-broker
 Restart=always
 RestartSec=15
 # Don't hammer Alpaca if it crash-loops:

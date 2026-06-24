@@ -48,7 +48,8 @@ SPECS = [
 CHAMPION_SPECS = [(s, tf, m) for s, tf, m in SPECS if s != "BTC"]
 CHAMPION_PARAMS = {
     "trend_following": {"adx_min": 20},
-    "mean_reversion": {"session_skip_bars": 2},
+    # vd_confirm: volume-delta confirmation — OOS-validated lift (PF 1.13 -> 1.47).
+    "mean_reversion": {"session_skip_bars": 2, "vd_confirm": True},
 }
 
 # "champion-plus" extends the trend leg with screened, OOS-positive ETFs

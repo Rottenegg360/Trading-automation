@@ -103,6 +103,56 @@ def obv(close: pd.Series, volume: pd.Series) -> pd.Series:
     return (direction * volume).cumsum()
 
 
+def volume_delta(df: pd.DataFrame) -> pd.Series:
+    """Per-bar signed volume PROXY via close-location-value. CLV in [-1,1]:
+    +1 = close at high (buying pressure), -1 = close at low (selling). This is
+    an APPROXIMATION of true order-flow delta (which needs trade-level aggressor
+    data we don't have) — useful as a coarse buy/sell-pressure confirmation."""
+    rng = (df["high"] - df["low"]).replace(0, np.nan)
+    clv = ((df["close"] - df["low"]) - (df["high"] - df["close"])) / rng
+    return clv.fillna(0.0) * df["volume"]
+
+
+def volume_profile(df: pd.DataFrame, lookback: int = 96, bins: int = 24,
+                   value_area: float = 0.70):
+    """Rolling volume profile (bar approximation). For each bar, bins the last
+    `lookback` bars' closes by volume and returns (POC, VAH, VAL): the
+    point-of-control price and the value-area high/low (the band holding
+    `value_area` of volume). True profiles need tick data; this approximates
+    from bars. Uses bars up to and including the current bar (known at close)."""
+    high = df["high"].to_numpy(); low = df["low"].to_numpy()
+    close = df["close"].to_numpy(); vol = df["volume"].to_numpy()
+    n = len(df)
+    poc = np.full(n, np.nan); vah = np.full(n, np.nan); val = np.full(n, np.nan)
+    for i in range(lookback - 1, n):
+        s = i - lookback + 1
+        lo, hi = low[s:i + 1].min(), high[s:i + 1].max()
+        if not np.isfinite(lo) or not np.isfinite(hi) or hi <= lo:
+            continue
+        edges = np.linspace(lo, hi, bins + 1)
+        hist, _ = np.histogram(close[s:i + 1], bins=edges, weights=vol[s:i + 1])
+        total = hist.sum()
+        if total <= 0:
+            continue
+        centers = (edges[:-1] + edges[1:]) / 2
+        k = int(hist.argmax())
+        poc[i] = centers[k]
+        target = value_area * total
+        lo_k = hi_k = k; acc = hist[k]
+        while acc < target:
+            left = hist[lo_k - 1] if lo_k - 1 >= 0 else -1.0
+            right = hist[hi_k + 1] if hi_k + 1 < bins else -1.0
+            if left < 0 and right < 0:
+                break
+            if right >= left:
+                hi_k += 1; acc += hist[hi_k]
+            else:
+                lo_k -= 1; acc += hist[lo_k]
+        val[i] = edges[lo_k]; vah[i] = edges[hi_k + 1]
+    return (pd.Series(poc, index=df.index), pd.Series(vah, index=df.index),
+            pd.Series(val, index=df.index))
+
+
 def session_vwap(df: pd.DataFrame) -> pd.Series:
     """Volume-weighted average price, re-anchored each UTC calendar day. The
     natural intraday 'mean' for equities — fade extension from VWAP. (For

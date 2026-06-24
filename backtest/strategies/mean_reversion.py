@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import pandas as pd
 
-from ..engine.indicators import adx, atr, rolling_z, rsi, session_vwap, sma
+from ..engine.indicators import (adx, atr, rolling_z, rsi, session_vwap, sma,
+                                 volume_delta, volume_profile)
 from ..engine.types import Signal
 
 
@@ -42,6 +43,10 @@ def generate_signals(
     rsi_ob: float = 90.0,
     use_vwap: bool = False,              # also require price stretched past session VWAP
     session_skip_bars: int = 0,          # skip first/last N bars of each session
+    vp_filter: bool = False,             # require price outside the volume value area
+    vp_lookback: int = 96,
+    vp_bins: int = 24,
+    vd_confirm: bool = False,            # require volume-delta to confirm the snap-back
 ) -> list[Signal]:
     z = rolling_z(df["close"], z_period)
     a = atr(df, atr_period)
@@ -50,6 +55,11 @@ def generate_signals(
     rsi_series = rsi(df["close"], rsi_period) if rsi_confirm else None
     vwap_series = session_vwap(df) if use_vwap else None
     edge_mask = _session_edge_mask(df.index, session_skip_bars)
+    if vp_filter:
+        _poc, vah_series, val_series = volume_profile(df, vp_lookback, vp_bins)
+    else:
+        vah_series = val_series = None
+    vd_series = volume_delta(df) if vd_confirm else None
     signals: list[Signal] = []
 
     for i in range(len(df)):
@@ -75,6 +85,10 @@ def generate_signals(
                 continue
             if vwap_series is not None and (pd.isna(vw) or price >= vw):
                 continue
+            if val_series is not None and (pd.isna(val_series.iloc[i]) or price >= val_series.iloc[i]):
+                continue  # require price below the value area (genuinely stretched)
+            if vd_series is not None and vd_series.iloc[i] <= 0:
+                continue  # require buying pressure (snap-back starting)
             stop = price - stop_atr_mult * ai
             signals.append(Signal(ts, symbol, "mean_reversion", +1, price, stop, ai,
                                   {"z": float(zi), "target": float(mean.iloc[i])}))
@@ -83,6 +97,10 @@ def generate_signals(
                 continue
             if vwap_series is not None and (pd.isna(vw) or price <= vw):
                 continue
+            if vah_series is not None and (pd.isna(vah_series.iloc[i]) or price <= vah_series.iloc[i]):
+                continue  # require price above the value area
+            if vd_series is not None and vd_series.iloc[i] >= 0:
+                continue  # require selling pressure
             stop = price + stop_atr_mult * ai
             signals.append(Signal(ts, symbol, "mean_reversion", -1, price, stop, ai,
                                   {"z": float(zi), "target": float(mean.iloc[i])}))

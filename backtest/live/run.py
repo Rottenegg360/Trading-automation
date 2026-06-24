@@ -45,11 +45,24 @@ def print_status(ledger: Ledger, broker: PaperBroker | None = None):
             print(f"  alpaca paper acct: (unavailable: {type(e).__name__})")
 
 
+def _sleep_to_next_bar(period_min: int = 15, buffer_s: int = 3):
+    """Sleep until ~buffer_s after the next 15-min boundary so a cycle fires
+    right after each bar closes (not on a drifting fixed timer). 4h closes land
+    on 15-min boundaries too, so this catches every instrument in the universe."""
+    import pandas as pd
+    now = pd.Timestamp.now(tz="UTC")
+    nm = ((now.minute // period_min) + 1) * period_min
+    nxt = now.floor("h") + pd.Timedelta(minutes=nm) + pd.Timedelta(seconds=buffer_s)
+    time.sleep(max(1.0, (nxt - now).total_seconds()))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--once", action="store_true", help="run a single cycle and exit")
     ap.add_argument("--loop", action="store_true", help="run continuously")
-    ap.add_argument("--interval", type=int, default=900, help="seconds between cycles in --loop")
+    ap.add_argument("--interval", type=int, default=900, help="seconds between cycles in --loop (fixed mode)")
+    ap.add_argument("--bar-aligned", action="store_true",
+                    help="wake ~3s after each 15-min bar close instead of a fixed interval (recommended)")
     ap.add_argument("--equity", type=float, default=1000.0, help="starting ledger equity (first run only)")
     ap.add_argument("--corr-threshold", type=float, default=0.7)
     ap.add_argument("--submit-broker", action="store_true",
@@ -95,13 +108,17 @@ def main():
         return ev
 
     if args.loop:
-        print(f"forward-test loop started (interval {args.interval}s, {'dry-run' if dry_run else 'PAPER ORDERS'}). Ctrl-C to stop.")
+        kind = "bar-aligned (~3s after each 15-min close)" if args.bar_aligned else f"fixed {args.interval}s"
+        print(f"forward-test loop started [{kind}, {'dry-run' if dry_run else 'PAPER ORDERS'}]. Ctrl-C to stop.")
         while True:
+            if args.bar_aligned:
+                _sleep_to_next_bar()
             try:
                 one()
             except Exception as e:
                 print(f"  cycle error: {type(e).__name__}: {e}")
-            time.sleep(args.interval)
+            if not args.bar_aligned:
+                time.sleep(args.interval)
     else:
         one()
         print_status(ledger)

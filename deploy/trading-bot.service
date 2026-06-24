@@ -8,7 +8,7 @@ Type=simple
 User=ubuntu
 WorkingDirectory=/home/ubuntu/Trading-automation
 # Reads ALPACA keys from the project .env via python-dotenv.
-ExecStart=/home/ubuntu/Trading-automation/.venv/bin/python -m backtest.live.run --loop --interval 900 --submit-broker
+ExecStart=/home/ubuntu/Trading-automation/.venv/bin/python -m backtest.live.run --loop --bar-aligned --submit-broker
 Restart=always
 RestartSec=15
 # Don't hammer Alpaca if it crash-loops:

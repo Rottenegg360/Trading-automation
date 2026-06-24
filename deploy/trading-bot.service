@@ -1,0 +1,19 @@
+[Unit]
+Description=Champion-plus paper trading loop (Alpaca paper)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/Trading-automation
+# Reads ALPACA keys from the project .env via python-dotenv.
+ExecStart=/home/ubuntu/Trading-automation/.venv/bin/python -m backtest.live.run --loop --interval 900 --submit-broker
+Restart=always
+RestartSec=15
+# Don't hammer Alpaca if it crash-loops:
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

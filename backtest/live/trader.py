@@ -26,6 +26,10 @@ from .broker import PaperBroker
 from .ledger import Ledger, Position
 
 MIN_BARS = 80
+# Catch-up staleness cap: act on a signal up to this many bars old (so a missed
+# cycle is recovered) but no older — mean-rev edge is gone past ~3 bars (delay
+# sweep), and chasing very stale trend setups isn't worth it.
+MAX_STALE = 3
 
 
 def prime(ledger: Ledger, broker: PaperBroker, verbose: bool = True) -> int:
@@ -154,7 +158,14 @@ def run_cycle(ledger: Ledger, broker: PaperBroker, *, corr_threshold: float = 0.
         mod, df, i = m["mod"], frames[sym], m["i"]
         strat = mod.__name__.rsplit(".", 1)[-1]
         sigs = mod.generate_signals(df, sym, **_accepted_kwargs(mod.generate_signals, CHAMPION_PARAMS.get(strat, {})))
-        sig = next((s for s in sigs if s.ts == m["last_ts"]), None)
+        # Catch-up: act on the most recent UN-ACTED signal since the cursor (not
+        # just the latest bar), so a missed/late cycle never silently drops one.
+        cur = ledger.get_cursor(sym)
+        cur_ts = pd.Timestamp(cur) if cur else None
+        fresh = [s for s in sigs if s.ts <= m["last_ts"] and (cur_ts is None or s.ts > cur_ts)]
+        sig = fresh[-1] if fresh else None
+        if sig is not None and (m["i"] - df.index.get_loc(sig.ts)) > MAX_STALE:
+            sig = None  # too stale — recover gaps, but don't chase old setups
         if sig is None:
             continue
         open_syms = list(held | set(ledger.open_positions().keys()))

@@ -20,6 +20,10 @@ def sma(s: pd.Series, period: int) -> pd.Series:
     return s.rolling(period, min_periods=period).mean()
 
 
+def ema(s: pd.Series, period: int) -> pd.Series:
+    return s.ewm(span=period, adjust=False, min_periods=period).mean()
+
+
 def rolling_z(s: pd.Series, period: int) -> pd.Series:
     """Z-score of price vs its rolling mean. Core of mean reversion."""
     mean = s.rolling(period, min_periods=period).mean()

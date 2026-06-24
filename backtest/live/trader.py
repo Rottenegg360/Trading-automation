@@ -34,9 +34,14 @@ def prime(ledger: Ledger, broker: PaperBroker, verbose: bool = True) -> int:
     reporting."""
     now = pd.Timestamp.now(tz="UTC")
     try:
-        ledger.set_meta("account_baseline", str(broker.account_equity()))
-    except Exception:
-        pass
+        eq = broker.account_equity()
+        ledger.set_meta("account_baseline", str(eq))
+        if verbose:
+            print(f"  account baseline recorded: ${eq:,.2f} (trading API OK)")
+    except Exception as e:
+        if verbose:
+            print(f"  WARNING: could not record account baseline ({type(e).__name__}: {str(e)[:80]}); "
+                  "report $-normalisation will fall back until a cycle records it")
     primed = 0
     for sym, tf, _mod in CHAMPION_PLUS_SPECS:
         try:

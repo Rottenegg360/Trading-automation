@@ -8,9 +8,25 @@ all equities, so there is no crypto order path here.
 """
 from __future__ import annotations
 
+import time
+
 import pandas as pd
 
 from ..engine.data import TIMEFRAME_MINUTES, _load_env_keys, load_alpaca_bars
+
+
+def _retry(fn, attempts: int = 3, delay: float = 2.0):
+    """Retry a flaky API read a few times — the Alpaca trading endpoint can
+    return a transient 5xx/timeout that a single call would surface as failure."""
+    last = None
+    for i in range(attempts):
+        try:
+            return fn()
+        except Exception as e:  # noqa: BLE001
+            last = e
+            if i < attempts - 1:
+                time.sleep(delay)
+    raise last
 
 # Generous calendar windows so we always get enough CLOSED bars for indicators
 # (champion uses slow MA 50, ADX 14, donchian 20 — a few hundred bars suffice).
@@ -30,12 +46,12 @@ class PaperBroker:
         return self._tc
 
     def account_equity(self) -> float:
-        return float(self.trading.get_account().equity)
+        return _retry(lambda: float(self.trading.get_account().equity))
 
     def get_positions(self) -> dict:
         """Open positions from the Alpaca PAPER account (the source of truth)."""
         out = {}
-        for p in self.trading.get_all_positions():
+        for p in _retry(self.trading.get_all_positions):
             qty = float(p.qty)
             out[p.symbol] = {
                 "qty": qty, "direction": 1 if qty > 0 else -1,

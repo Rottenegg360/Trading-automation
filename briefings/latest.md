@@ -3,14 +3,14 @@ DAILY BRIEFING
 ============================================================
 
 1) PERFORMANCE - completed US session
-END-OF-DAY PERFORMANCE - Sun 18 Oct 2026, 13:57 ICT
-Equity: $1,007.81  (+0.78% since start)  [Alpaca paper (normalised to $1,000)]
+END-OF-DAY PERFORMANCE - Mon 19 Oct 2026, 14:17 ICT
+Equity: $1,044.30  (+4.43% since start)  [Alpaca paper (normalised to $1,000)]
 Realized P&L (last 24h): $0.00  over 0 trades (0W / 0L)
 
 Per-strategy attribution (last 24h):
   (no trades closed in the last 24h)
 
-Open exposure: 4 positions, unrealized $33.79
+Open exposure: 4 positions, unrealized $70.28
   DBA  LONG  @ 27.60 stop n/a (?)
   DBC  LONG  @ 29.78 stop n/a (?)
   QQQ  LONG  @ 716.00 stop n/a (?)
@@ -22,8 +22,8 @@ Total closed trades since start: 7
 ============================================================
 
 2) SETUP - today's market context
-MORNING BRIEFING - Sun 18 Oct 2026, 13:57 ICT
-Account: $1,007.81  (start $1,000.00, +0.78%)  [Alpaca paper (normalised to $1,000)]
+MORNING BRIEFING - Mon 19 Oct 2026, 14:17 ICT
+Account: $1,044.30  (start $1,000.00, +4.43%)  [Alpaca paper (normalised to $1,000)]
 
 Recent moves & levels:
   SPY    763.31  +0.12%   range 760.65 to 770.08  ATR 1.40
@@ -36,9 +36,9 @@ Recent moves & levels:
 
 Open positions: 4
   DBA  LONG  @ 27.60  stop n/a  uPnL $11.83 (?)
-  DBC  LONG  @ 29.78  stop n/a  uPnL $40.51 (?)
-  QQQ  LONG  @ 716.00  stop n/a  uPnL $-22.75 (?)
-  SPXL LONG  @ 256.88  stop n/a  uPnL $4.20 (?)
+  DBC  LONG  @ 29.78  stop n/a  uPnL $42.15 (?)
+  QQQ  LONG  @ 716.00  stop n/a  uPnL $11.08 (?)
+  SPXL LONG  @ 256.88  stop n/a  uPnL $5.22 (?)
 
 Strategies armed (by regime):
   trend-following : UUP(up, ADX 28.7)

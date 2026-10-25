@@ -3,7 +3,7 @@ DAILY BRIEFING
 ============================================================
 
 1) PERFORMANCE - completed US session
-END-OF-DAY PERFORMANCE - Sat 24 Oct 2026, 13:51 ICT
+END-OF-DAY PERFORMANCE - Sun 25 Oct 2026, 14:15 ICT
 Equity: $984.09  (-1.59% since start)  [Alpaca paper (normalised to $1,000)]
 Realized P&L (last 24h): $0.00  over 0 trades (0W / 0L)
 
@@ -22,7 +22,7 @@ Total closed trades since start: 7
 ============================================================
 
 2) SETUP - today's market context
-MORNING BRIEFING - Sat 24 Oct 2026, 13:51 ICT
+MORNING BRIEFING - Sun 25 Oct 2026, 14:15 ICT
 Account: $984.09  (start $1,000.00, -1.59%)  [Alpaca paper (normalised to $1,000)]
 
 Recent moves & levels:

@@ -3,14 +3,14 @@ DAILY BRIEFING
 ============================================================
 
 1) PERFORMANCE - completed US session
-END-OF-DAY PERFORMANCE - Fri 06 Nov 2026, 15:55 ICT
-Equity: $881.90  (-11.81% since start)  [Alpaca paper (normalised to $1,000)]
+END-OF-DAY PERFORMANCE - Sat 07 Nov 2026, 15:17 ICT
+Equity: $881.69  (-11.83% since start)  [Alpaca paper (normalised to $1,000)]
 Realized P&L (last 24h): $0.00  over 0 trades (0W / 0L)
 
 Per-strategy attribution (last 24h):
   (no trades closed in the last 24h)
 
-Open exposure: 3 positions, unrealized $-11.59
+Open exposure: 3 positions, unrealized $-11.81
   DBA  LONG  @ 27.60 stop n/a (?)
   DBC  LONG  @ 29.78 stop n/a (?)
   SPXL LONG  @ 256.88 stop n/a (?)
@@ -21,23 +21,23 @@ Total closed trades since start: 8
 ============================================================
 
 2) SETUP - today's market context
-MORNING BRIEFING - Fri 06 Nov 2026, 15:55 ICT
-Account: $881.90  (start $1,000.00, -11.81%)  [Alpaca paper (normalised to $1,000)]
+MORNING BRIEFING - Sat 07 Nov 2026, 15:17 ICT
+Account: $881.69  (start $1,000.00, -11.83%)  [Alpaca paper (normalised to $1,000)]
 
 Recent moves & levels:
-  SPY    730.52  -0.64%   range 730.52 to 742.03  ATR 2.65
-  QQQ    648.05  -0.58%   range 647.27 to 662.50  ATR 3.97
-  GLD    375.55  +4.53%   range 354.69 to 378.94  ATR 3.76
-  USO    148.18  -6.32%   range 143.17 to 171.78  ATR 3.25
-  DBC     31.48  -3.00%   range 31.09 to 33.98  ATR 0.29
-  DBA     26.16  -1.51%   range 26.11 to 27.55  ATR 0.12
-  UUP     28.93  -0.28%   range 28.86 to 29.15  ATR 0.05
+  SPY    736.07  -0.29%   range 735.07 to 740.79  ATR 1.54
+  QQQ    656.87  -0.27%   range 654.01 to 662.06  ATR 2.30
+  GLD    372.55  +0.03%   range 354.69 to 378.94  ATR 3.59
+  USO    148.43  +2.10%   range 143.17 to 171.78  ATR 2.94
+  DBC     31.52  +0.78%   range 31.09 to 33.98  ATR 0.27
+  DBA     26.12  -1.23%   range 25.95 to 27.24  ATR 0.12
+  UUP     29.14  +0.83%   range 28.86 to 29.15  ATR 0.06
 
 Open positions: 3
-  DBA  LONG  @ 27.60  stop n/a  uPnL $-27.04 (?)
-  DBC  LONG  @ 29.78  stop n/a  uPnL $17.29 (?)
-  SPXL LONG  @ 256.88  stop n/a  uPnL $-1.84 (?)
+  DBA  LONG  @ 27.60  stop n/a  uPnL $-27.98 (?)
+  DBC  LONG  @ 29.78  stop n/a  uPnL $18.00 (?)
+  SPXL LONG  @ 256.88  stop n/a  uPnL $-1.83 (?)
 
 Strategies armed (by regime):
-  trend-following : GLD(down, ADX 23.7), USO(up, ADX 26.3), DBC(down, ADX 27.9), DBA(down, ADX 67.0)
+  trend-following : GLD(down, ADX 21.5), USO(down, ADX 28.0), DBC(down, ADX 30.1), DBA(down, ADX 71.0)
   mean-reversion  : none - no stretched z-score

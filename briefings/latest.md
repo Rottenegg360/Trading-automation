@@ -3,14 +3,14 @@ DAILY BRIEFING
 ============================================================
 
 1) PERFORMANCE - completed US session
-END-OF-DAY PERFORMANCE - Sun 08 Nov 2026, 15:34 ICT
-Equity: $881.69  (-11.83% since start)  [Alpaca paper (normalised to $1,000)]
+END-OF-DAY PERFORMANCE - Mon 09 Nov 2026, 16:04 ICT
+Equity: $882.27  (-11.77% since start)  [Alpaca paper (normalised to $1,000)]
 Realized P&L (last 24h): $0.00  over 0 trades (0W / 0L)
 
 Per-strategy attribution (last 24h):
   (no trades closed in the last 24h)
 
-Open exposure: 3 positions, unrealized $-11.81
+Open exposure: 3 positions, unrealized $-11.23
   DBA  LONG  @ 27.60 stop n/a (?)
   DBC  LONG  @ 29.78 stop n/a (?)
   SPXL LONG  @ 256.88 stop n/a (?)
@@ -21,8 +21,8 @@ Total closed trades since start: 8
 ============================================================
 
 2) SETUP - today's market context
-MORNING BRIEFING - Sun 08 Nov 2026, 15:34 ICT
-Account: $881.69  (start $1,000.00, -11.83%)  [Alpaca paper (normalised to $1,000)]
+MORNING BRIEFING - Mon 09 Nov 2026, 16:04 ICT
+Account: $882.27  (start $1,000.00, -11.77%)  [Alpaca paper (normalised to $1,000)]
 
 Recent moves & levels:
   SPY    736.07  -0.29%   range 735.07 to 740.79  ATR 1.54
@@ -36,7 +36,7 @@ Recent moves & levels:
 Open positions: 3
   DBA  LONG  @ 27.60  stop n/a  uPnL $-27.98 (?)
   DBC  LONG  @ 29.78  stop n/a  uPnL $18.00 (?)
-  SPXL LONG  @ 256.88  stop n/a  uPnL $-1.83 (?)
+  SPXL LONG  @ 256.88  stop n/a  uPnL $-1.25 (?)
 
 Strategies armed (by regime):
   trend-following : GLD(down, ADX 21.5), USO(down, ADX 28.0), DBC(down, ADX 30.1), DBA(down, ADX 71.0)

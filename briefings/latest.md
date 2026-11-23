@@ -3,14 +3,14 @@ DAILY BRIEFING
 ============================================================
 
 1) PERFORMANCE - completed US session
-END-OF-DAY PERFORMANCE - Sun 22 Nov 2026, 16:20 ICT
-Equity: $882.61  (-11.74% since start)  [Alpaca paper (normalised to $1,000)]
+END-OF-DAY PERFORMANCE - Mon 23 Nov 2026, 17:17 ICT
+Equity: $877.59  (-12.24% since start)  [Alpaca paper (normalised to $1,000)]
 Realized P&L (last 24h): $0.00  over 0 trades (0W / 0L)
 
 Per-strategy attribution (last 24h):
   (no trades closed in the last 24h)
 
-Open exposure: 5 positions, unrealized $-10.89
+Open exposure: 5 positions, unrealized $-15.90
   DBA  LONG  @ 27.60 stop n/a (?)
   DBC  LONG  @ 29.78 stop n/a (?)
   GLD  SHORT @ 355.66 stop 366.48 (trend_following)
@@ -23,8 +23,8 @@ Total closed trades since start: 8
 ============================================================
 
 2) SETUP - today's market context
-MORNING BRIEFING - Sun 22 Nov 2026, 16:20 ICT
-Account: $882.61  (start $1,000.00, -11.74%)  [Alpaca paper (normalised to $1,000)]
+MORNING BRIEFING - Mon 23 Nov 2026, 17:17 ICT
+Account: $877.59  (start $1,000.00, -12.24%)  [Alpaca paper (normalised to $1,000)]
 
 Recent moves & levels:
   SPY    693.89  -0.18%   range 686.75 to 705.51  ATR 3.21
@@ -36,11 +36,11 @@ Recent moves & levels:
   UUP     29.63  +0.05%   range 29.41 to 29.66  ATR 0.04
 
 Open positions: 5
-  DBA  LONG  @ 27.60  stop n/a  uPnL $-27.23 (?)
-  DBC  LONG  @ 29.78  stop n/a  uPnL $-4.71 (?)
-  GLD  SHORT @ 355.66  stop 366.48  uPnL $24.26 (trend_following)
-  SPXL LONG  @ 256.88  stop n/a  uPnL $-9.91 (?)
-  UUP  LONG  @ 29.49  stop 29.32  uPnL $6.70 (trend_following)
+  DBA  LONG  @ 27.60  stop n/a  uPnL $-26.29 (?)
+  DBC  LONG  @ 29.78  stop n/a  uPnL $-5.42 (?)
+  GLD  SHORT @ 355.66  stop 366.48  uPnL $17.75 (trend_following)
+  SPXL LONG  @ 256.88  stop n/a  uPnL $-7.09 (?)
+  UUP  LONG  @ 29.49  stop 29.32  uPnL $5.15 (trend_following)
 
 Strategies armed (by regime):
   trend-following : GLD(down, ADX 47.3), USO(down, ADX 29.9), DBC(down, ADX 42.7), DBA(down, ADX 25.9), UUP(up, ADX 40.7)
